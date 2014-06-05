@@ -1,5 +1,15 @@
 package com.teradata.avro;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.avro.file.DataFileReader;
+import org.apache.avro.file.DataFileWriter;
+import org.apache.avro.io.DatumReader;
+import org.apache.avro.io.DatumWriter;
+import org.apache.avro.specific.SpecificDatumReader;
+import org.apache.avro.specific.SpecificDatumWriter;
+
 import example.avro.User;
 
 /**
@@ -8,7 +18,7 @@ import example.avro.User;
  */
 public class App {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		System.out.println("Example Code : Avro Adding Users");
 		System.out.println("--------------------------------");
 		User user1 = new User();
@@ -23,5 +33,42 @@ public class App {
 		User user3 = User.newBuilder().setName("Charlie")
 				.setFavoriteColor("blue").setFavoriteNumber(null).build();
 
+		// Serializing
+		serializeExample(user1, user2, user3);
+		File file = new File("users.avro");
+		// Deserialization
+		deserializeExample(file);
+
+	}
+
+	private static void deserializeExample(File file) throws IOException {
+		// Deserialize Users from disk
+		DatumReader<User> userDatumReader = new SpecificDatumReader<User>(
+				User.class);
+		DataFileReader<User> dataFileReader = new DataFileReader<User>(file,
+				userDatumReader);
+		User user = null;
+		while (dataFileReader.hasNext()) {
+			// Reuse user object by passing it to next(). This saves us from
+			// allocating and garbage collecting many objects for files with
+			// many items.
+			user = dataFileReader.next(user);
+			System.out.println(user);
+		}
+	}
+
+	private static void serializeExample(User user1, User user2, User user3)
+			throws IOException {
+		// Serialize user1 and user2 to disk
+
+		DatumWriter<User> userDatumWriter = new SpecificDatumWriter<User>(
+				User.class);
+		DataFileWriter<User> dataFileWriter = new DataFileWriter<User>(
+				userDatumWriter);
+		dataFileWriter.create(user1.getSchema(), new File("users.avro"));
+		dataFileWriter.append(user1);
+		dataFileWriter.append(user2);
+		dataFileWriter.append(user3);
+		dataFileWriter.close();
 	}
 }
