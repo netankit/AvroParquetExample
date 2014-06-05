@@ -1,5 +1,7 @@
 package com.teradata.avro;
 
+import example.avro.User;
+
 /**
  * Hello world!
  * 
@@ -7,7 +9,8 @@ package com.teradata.avro;
 public class App {
 
 	public static void main(String[] args) {
-		System.out.println("Hello World!");
+		System.out.println("Example Code : Avro Adding Users");
+		System.out.println("--------------------------------");
 		User user1 = new User();
 		user1.setName("Alyssa");
 		user1.setFavoriteNumber(256);
