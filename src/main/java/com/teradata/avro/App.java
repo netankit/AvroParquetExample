@@ -47,18 +47,28 @@ public class App {
 
 		File file = new File("users.avro");
 		File parquet_file = new File("App.parquet");
-
 		Path parquet_file_path = new Path(parquet_file.getPath());
 
 		// Deserialization
 		deserializeExample(file);
-
+		// Read Write Data with Avro
 		readWriteDataWithAvro(user1, user2, user3);
+
+		// Write Avro to Parquet
 		writeAvroToParquet(user1, user2, user3);
+
+		// Read Parquet File
 		readParquetFile(parquet_file_path);
 
 	}
 
+	/**
+	 * Reads the Parquet File
+	 * 
+	 * @param parquet_file_path
+	 *            : Path of the Parquet File created on Disk
+	 * @throws IOException
+	 */
 	private static void readParquetFile(Path parquet_file_path)
 			throws IOException {
 		ParquetReader<User> reader = new AvroParquetReader<User>(
@@ -73,6 +83,15 @@ public class App {
 		}
 	}
 
+	/**
+	 * Writes Avro User Objects to Parquet File, we pass various User objects as
+	 * parameters.
+	 * 
+	 * @param user1
+	 * @param user2
+	 * @param user3
+	 * @throws IOException
+	 */
 	private static void writeAvroToParquet(User user1, User user2, User user3)
 			throws IOException {
 		File tmp = new File(App.class.getSimpleName() + ".parquet");
@@ -89,12 +108,27 @@ public class App {
 		writer.close();
 	}
 
+	/**
+	 * Adds several Avro objects to a separate users.avro file and serializes
+	 * them.
+	 * 
+	 * @param user1
+	 * @param user2
+	 * @param user3
+	 * @throws IOException
+	 */
 	private static void addUsersAndSerialize(User user1, User user2, User user3)
 			throws IOException {
 		// Serializing
 		serializeExample(user1, user2, user3);
 	}
 
+	/**
+	 * Deserializes all the Avro objects from the users.avro file
+	 * 
+	 * @param file
+	 * @throws IOException
+	 */
 	private static void deserializeExample(File file) throws IOException {
 		// Deserialize Users from disk
 		DatumReader<User> userDatumReader = new SpecificDatumReader<User>(
@@ -112,6 +146,14 @@ public class App {
 		}
 	}
 
+	/**
+	 * Serializes Avro user objects
+	 * 
+	 * @param user1
+	 * @param user2
+	 * @param user3
+	 * @throws IOException
+	 */
 	private static void serializeExample(User user1, User user2, User user3)
 			throws IOException {
 		// Serialize user1 and user2 to disk
@@ -127,15 +169,23 @@ public class App {
 		dataFileWriter.close();
 	}
 
+	/**
+	 * Read and Write Data with Avro
+	 * 
+	 * @param user1
+	 * @param user2
+	 * @param user3
+	 * @throws IOException
+	 */
 	private static void readWriteDataWithAvro(User user1, User user2, User user3)
 			throws IOException {
 		// Serialize user1 and user2 to disk
-		File file = new File("users.avro");
+		File file = new File("users_new.avro");
 		DatumWriter<User> userDatumWriter = new SpecificDatumWriter<User>(
 				User.class);
 		DataFileWriter<User> dataFileWriter = new DataFileWriter<User>(
 				userDatumWriter);
-		dataFileWriter.create(user1.getSchema(), new File("users.avro"));
+		dataFileWriter.create(user1.getSchema(), new File("users_new.avro"));
 		dataFileWriter.append(user1);
 		dataFileWriter.append(user2);
 		dataFileWriter.append(user3);
