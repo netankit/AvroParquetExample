@@ -41,27 +41,28 @@ public class App {
 		// Construct via builder
 		User user3 = User.newBuilder().setName("Chris")
 				.setFavoriteColor("Green").setFavoriteNumber(null).build();
-		// Adds user to avro object and Serializes it.
+
+		// Adds user to Avro object and Serialize it.
 		addUsersAndSerialize(user1, user2, user3);
 
 		File file = new File("users.avro");
-		File parquet_file = new File("users.parquet");
+		File parquet_file = new File("App.parquet");
 
 		Path parquet_file_path = new Path(parquet_file.getPath());
 
 		// Deserialization
 		deserializeExample(file);
 
-		writeAvroToParquet(user1, user2, user3);
-
 		readWriteDataWithAvro(user1, user2, user3);
-
+		writeAvroToParquet(user1, user2, user3);
 		readParquetFile(parquet_file_path);
 
 	}
 
-	private static void readParquetFile(Path file_path) throws IOException {
-		ParquetReader<User> reader = new AvroParquetReader<User>(file_path);
+	private static void readParquetFile(Path parquet_file_path)
+			throws IOException {
+		ParquetReader<User> reader = new AvroParquetReader<User>(
+				parquet_file_path);
 		System.out.println("Read from Parquet File: ");
 
 		User user = null;
