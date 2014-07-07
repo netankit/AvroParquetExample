@@ -1,5 +1,6 @@
 package com.teradata.avro;
 
+import static parquet.filter.ColumnPredicates.equalTo;
 import static parquet.hadoop.ParquetWriter.DEFAULT_BLOCK_SIZE;
 import static parquet.hadoop.ParquetWriter.DEFAULT_PAGE_SIZE;
 
@@ -16,6 +17,7 @@ import org.apache.hadoop.fs.Path;
 
 import parquet.avro.AvroParquetReader;
 import parquet.avro.AvroParquetWriter;
+import parquet.filter.ColumnRecordFilter;
 import parquet.hadoop.ParquetReader;
 import parquet.hadoop.ParquetWriter;
 import parquet.hadoop.metadata.CompressionCodecName;
@@ -59,6 +61,8 @@ public class App {
 
 		// Read Parquet File
 		readParquetFile(parquet_file_path);
+		// Read Specific Parquet Record
+		readSpecificParquetRecord();
 
 	}
 
@@ -74,13 +78,29 @@ public class App {
 		ParquetReader<User> reader = new AvroParquetReader<User>(
 				parquet_file_path);
 		System.out.println("Read from Parquet File: ");
-
 		User user = null;
 		while ((user = reader.read()) != null) {
 			System.out.println("Name : " + user.getName());
 			System.out.println("Favourite Colour : " + user.getFavoriteColor());
 			System.out.println("Fav Number : " + user.getFavoriteNumber());
 		}
+	}
+
+	public static void readSpecificParquetRecord() throws IOException {
+		File parquet_file = new File("App.parquet");
+		Path parquet_file_path = new Path(parquet_file.getPath());
+		System.out.println("Reading a Specific Record from Parquet:");
+		System.out.println("------------------------------------");
+		ParquetReader<User> reader_single;
+		try {
+			reader_single = new AvroParquetReader<User>(parquet_file_path,
+					ColumnRecordFilter.column("name", equalTo("Patrick")));
+			System.out.println(reader_single.read());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
