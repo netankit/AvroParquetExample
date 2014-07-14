@@ -38,7 +38,7 @@ public class App {
 		user1.setName("Ankit");
 		user1.setFavoriteNumber(011);
 
-		User user2 = new User("Patick", 21, "Black");
+		User user2 = new User("Patrick", 21, "Black");
 
 		// Construct via builder
 		User user3 = User.newBuilder().setName("Chris")
@@ -94,7 +94,7 @@ public class App {
 		ParquetReader<User> reader_single;
 		try {
 			reader_single = new AvroParquetReader<User>(parquet_file_path,
-					ColumnRecordFilter.column("name", equalTo("Patrick")));
+					ColumnRecordFilter.column("favorite_number", equalTo(21)));
 			System.out.println(reader_single.read());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

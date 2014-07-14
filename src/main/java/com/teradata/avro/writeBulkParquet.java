@@ -24,7 +24,7 @@ public class writeBulkParquet {
 
 	public static void main(String[] args) throws IOException {
 
-		int NUMBER_OF_RECORDS = 10;
+		int NUMBER_OF_RECORDS = 2500000;
 		// Constructs a User object (avro), consisting of 1.5 Million Records,
 		// with random data for name, Color and Favorite number
 		// Construct via builder
@@ -39,8 +39,17 @@ public class writeBulkParquet {
 					getRandomNumber(), getRandomColor(colors));
 
 			user.add(user_builder);
+
 			System.out.println("Record added to user list: " + i);
 		}
+		User user_builder1 = new User("Ankit", 22, "Green");
+		User user_builder2 = new User("Ankit", 22, "Green");
+		User user_builder3 = new User("Ankit Bahuguna", 23, "Green");
+
+		user.add(user_builder1);
+		user.add(user_builder2);
+		user.add(user_builder3);
+
 		System.out
 				.println("Avro user object populated with 15 million records");
 
@@ -98,7 +107,7 @@ public class writeBulkParquet {
 		return random_color;
 	}
 
-	private static Integer getRandomNumber() {
+	private static int getRandomNumber() {
 		int min = 0;
 		int max = 2500000;
 
