@@ -24,7 +24,7 @@ public class writeBulkParquet {
 
 	public static void main(String[] args) throws IOException {
 
-		int NUMBER_OF_RECORDS = 2500000;
+		int NUMBER_OF_RECORDS = 5000000;
 		// Constructs a User object (avro), consisting of 1.5 Million Records,
 		// with random data for name, Color and Favorite number
 		// Construct via builder

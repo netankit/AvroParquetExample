@@ -84,6 +84,7 @@ public class App {
 			System.out.println("Favourite Colour : " + user.getFavoriteColor());
 			System.out.println("Fav Number : " + user.getFavoriteNumber());
 		}
+		reader.close();
 	}
 
 	public static void readSpecificParquetRecord() throws IOException {
@@ -163,6 +164,7 @@ public class App {
 			// many items.
 			user = dataFileReader.next(user);
 			System.out.println(user);
+			dataFileReader.close();
 		}
 	}
 
@@ -224,5 +226,6 @@ public class App {
 			user = dataFileReader.next(user);
 			// System.out.println(user);
 		}
+		dataFileReader.close();
 	}
 }
