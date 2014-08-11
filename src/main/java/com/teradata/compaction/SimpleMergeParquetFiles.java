@@ -57,7 +57,7 @@ public class SimpleMergeParquetFiles {
 
 	private static void writeAvroToParquet(ArrayList<User> user)
 			throws IOException {
-		System.out.println("Starting wrting to Parquet");
+		System.out.println("Starting writing to Parquet");
 		File tmp = new File("MergedParquet.parquet");
 		if (tmp.exists()) {
 			tmp.delete();
@@ -70,7 +70,7 @@ public class SimpleMergeParquetFiles {
 		for (Iterator<User> iterator = user.iterator(); iterator.hasNext();) {
 			Object object = iterator.next();
 			writer.write((User) object);
-			System.out.println("Record writen to parquet file: " + count);
+			System.out.println("Record written to parquet file: " + count);
 			count++;
 		}
 
