@@ -24,7 +24,7 @@ public class writeBulkParquet {
 
 	public static void main(String[] args) throws IOException {
 
-		int NUMBER_OF_RECORDS = 5000000;
+		int NUMBER_OF_RECORDS = 500000;
 		// Constructs a User object (avro), consisting of 1.5 Million Records,
 		// with random data for name, Color and Favorite number
 		// Construct via builder
@@ -34,24 +34,25 @@ public class writeBulkParquet {
 		ArrayList<String> colors = new ArrayList<String>();
 
 		for (int i = 0; i < NUMBER_OF_RECORDS; i++) {
-
+			// Creates record for one user
 			User user_builder = new User(getRandomName(names),
 					getRandomNumber(), getRandomColor(colors));
-
+			// Adds that one record into a global user object which is stored as
+			// an arraylist.
 			user.add(user_builder);
 
 			System.out.println("Record added to user list: " + i);
 		}
-		User user_builder1 = new User("Ankit", 22, "Green");
-		User user_builder2 = new User("Ankit", 22, "Green");
-		User user_builder3 = new User("Ankit Bahuguna", 23, "Green");
+		// User user_builder1 = new User("Ankit", 22, "Green");
+		// User user_builder2 = new User("Ankit", 22, "Green");
+		// User user_builder3 = new User("Ankit Bahuguna", 23, "Green");
+		//
+		// user.add(user_builder1);
+		// user.add(user_builder2);
+		// user.add(user_builder3);
 
-		user.add(user_builder1);
-		user.add(user_builder2);
-		user.add(user_builder3);
-
-		System.out
-				.println("Avro user object populated with 15 million records");
+		System.out.println("Avro user object populated with "
+				+ NUMBER_OF_RECORDS + " million records.");
 
 		writeAvroToParquet(user);
 		System.out.println("Everything done!");
@@ -60,7 +61,7 @@ public class writeBulkParquet {
 	private static void writeAvroToParquet(ArrayList<User> user)
 			throws IOException {
 		System.out.println("Starting wrting to Parquet");
-		File tmp = new File("sample.parquet");
+		File tmp = new File("sample1.parquet");
 		if (tmp.exists()) {
 			tmp.delete();
 		}

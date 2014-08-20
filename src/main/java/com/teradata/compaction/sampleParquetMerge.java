@@ -3,6 +3,7 @@ package com.teradata.compaction;
 import static parquet.hadoop.ParquetWriter.DEFAULT_BLOCK_SIZE;
 import static parquet.hadoop.ParquetWriter.DEFAULT_PAGE_SIZE;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.avro.generic.GenericRecord;
@@ -28,6 +29,12 @@ public class sampleParquetMerge {
 		GenericRecord tmp = reader.read();
 
 		System.out.println("Schema: " + tmp.getSchema());
+
+		File outputFile = new File(
+				"/home/ankit/workspace/AvroExample/BulkParquetFiles/final.parquet");
+		if (outputFile.exists()) {
+			outputFile.delete();
+		}
 
 		ParquetWriter<GenericRecord> writer = new AvroParquetWriter<GenericRecord>(
 				parquet_output_file_path, tmp.getSchema(),
