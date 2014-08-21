@@ -59,7 +59,7 @@ public class GenericParquetMerge {
 						parquet_file_path);
 				GenericRecord tmp;
 				while ((tmp = reader.read()) != null) {
-					// System.out.println(tmp.toString());
+					System.out.println(tmp.toString());
 					writer.write(tmp);
 				}
 				reader.close();
