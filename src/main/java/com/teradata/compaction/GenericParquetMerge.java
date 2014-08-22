@@ -34,7 +34,7 @@ public class GenericParquetMerge {
 
 		String directory_path = "BulkParquetFiles1";
 		final File folder = new File(directory_path);
-		String outputPath = "/home/ankit/workspace/AvroExample/BulkParquetFiles1/final.parquet";
+		String outputPath = "/home/ankit/workspace/AvroExample/final_test.parquet";
 		Path parquet_output_file_path = new Path(outputPath);
 
 		Schema fileSchema = null;
@@ -50,23 +50,25 @@ public class GenericParquetMerge {
 				CompressionCodecName.UNCOMPRESSED, DEFAULT_BLOCK_SIZE,
 				DEFAULT_PAGE_SIZE, false);
 
-		for (final File fileEntry : folder.listFiles()) {
+		for (File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
 				continue;
 			} else {
+				System.out.println("Current File: " + fileEntry);
 				Path parquet_file_path = new Path(fileEntry.getPath());
 				ParquetReader<GenericRecord> reader = new AvroParquetReader<GenericRecord>(
 						parquet_file_path);
 				GenericRecord tmp;
 				while ((tmp = reader.read()) != null) {
-					System.out.println(tmp.toString());
+					// System.out.println(tmp.toString());
 					writer.write(tmp);
 				}
 				reader.close();
+
 			}
 		}
 		writer.close();
-
+		System.out.println("Merging of Files - Finished");
 	}
 
 	private static Schema getBaseSchema(final File folder, Schema fileSchema)

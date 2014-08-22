@@ -42,7 +42,7 @@ public class sampleParquetMerge {
 				DEFAULT_PAGE_SIZE, false);
 
 		while ((tmp = reader.read()) != null) {
-			System.out.println(tmp.toString());
+			// System.out.println(tmp.toString());
 			writer.write(tmp);
 		}
 		reader.close();
