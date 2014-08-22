@@ -69,3 +69,8 @@ local.properties
  
 # PDT-specific
 .buildpath
+
+#This project Specific
+*.crc
+*.parquet
+
