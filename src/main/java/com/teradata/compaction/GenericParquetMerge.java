@@ -31,7 +31,9 @@ import parquet.hadoop.metadata.CompressionCodecName;
  * WARNING: If the directory_path_of_bulk_input_files already contains a folder
  * named "output_000", the script exits!
  * 
- * @author ankit
+ * @author Ankit Bahuguna <ankit.bahuguna@cs.tum.edu>
+ * @version 1.0
+ * @date 22 August, 2014
  *
  */
 
@@ -44,9 +46,9 @@ public class GenericParquetMerge {
 
 		if (args.length != 1) {
 			System.err
-					.println("Usage: javac GenericParquetMerge directory_path_of_bulk_input_files");
+					.println("Usage (After Compiling Java Class): javac GenericParquetMerge directory_path_of_bulk_input_files");
 			System.err
-					.println("Usage(JAR): java -jar pmerge directory_path_of_bulk_input_files");
+					.println("Usage (Pre-Compiled JAR): java -jar pmerge directory_path_of_bulk_input_files");
 			System.exit(0);
 		}
 
