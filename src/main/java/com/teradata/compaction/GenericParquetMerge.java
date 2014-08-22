@@ -32,9 +32,12 @@ public class GenericParquetMerge {
 
 	public static void main(String[] args) throws IOException {
 
-		String directory_path = "BulkParquetFiles1";
+		String directory_path = "/home/ankit/workspace/AvroExample/BulkParquetFiles1";
 		final File folder = new File(directory_path);
-		String outputPath = "/home/ankit/workspace/AvroExample/final_test.parquet";
+
+		String outputDirectoryPath = directory_path + "/output";
+		createFolder(outputDirectoryPath);
+		String outputPath = outputDirectoryPath + "/final_0000.parquet";
 		Path parquet_output_file_path = new Path(outputPath);
 
 		Schema fileSchema = null;
@@ -90,5 +93,19 @@ public class GenericParquetMerge {
 			}
 		}
 		return fileSchema;
+	}
+
+	private static boolean createFolder(String theFilePath) {
+		boolean result = false;
+
+		File directory = new File(theFilePath);
+
+		if (directory.exists()) {
+			System.out.println("Folder already exists");
+		} else {
+			result = directory.mkdirs();
+		}
+
+		return result;
 	}
 }
