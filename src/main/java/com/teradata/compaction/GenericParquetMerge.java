@@ -18,10 +18,18 @@ import parquet.hadoop.metadata.CompressionCodecName;
 
 /**
  * This script can be used to merge all Parquet files present in a given
- * directory, irrespective of a given schema, without using map-reduce.This
- * script differs from SimpleMergeParquetFiles as it doesn't require an already
- * compiled Avro object in order to make it more generic to unknown Avro
- * objects.
+ * directory, with the same given schema, without using map-reduce.This script
+ * differs from SimpleMergeParquetFiles as it doesn't require an already
+ * compiled Avro object.
+ * 
+ * Usage: javac GenericParquetMerge directory_path_of_bulk_input_files
+ * Usage(JAR): java -jar pmerge directory_path_of_bulk_input_files
+ * 
+ * Working: The script creates a new folder "output_000". And within it creates
+ * a final_0000.parquet.
+ * 
+ * WARNING: If the directory_path_of_bulk_input_files already contains a folder
+ * named "output_000", the script exits!
  * 
  * @author ankit
  *
@@ -32,10 +40,20 @@ public class GenericParquetMerge {
 
 	public static void main(String[] args) throws IOException {
 
-		String directory_path = "/home/ankit/workspace/AvroExample/BulkParquetFiles1";
+		// args[0] = "./BulkParquetFiles1";
+
+		if (args.length != 1) {
+			System.err
+					.println("Usage: javac GenericParquetMerge directory_path_of_bulk_input_files");
+			System.err
+					.println("Usage(JAR): java -jar pmerge directory_path_of_bulk_input_files");
+			System.exit(0);
+		}
+
+		String directory_path = args[0];
 		final File folder = new File(directory_path);
 
-		String outputDirectoryPath = directory_path + "/output";
+		String outputDirectoryPath = directory_path + "/output_000";
 		createFolder(outputDirectoryPath);
 		String outputPath = outputDirectoryPath + "/final_0000.parquet";
 		Path parquet_output_file_path = new Path(outputPath);
@@ -57,7 +75,7 @@ public class GenericParquetMerge {
 			if (fileEntry.isDirectory()) {
 				continue;
 			} else {
-				System.out.println("Current File: " + fileEntry);
+				// System.out.println("Current File: " + fileEntry);
 				Path parquet_file_path = new Path(fileEntry.getPath());
 				ParquetReader<GenericRecord> reader = new AvroParquetReader<GenericRecord>(
 						parquet_file_path);
@@ -101,7 +119,9 @@ public class GenericParquetMerge {
 		File directory = new File(theFilePath);
 
 		if (directory.exists()) {
-			System.out.println("Folder already exists");
+			System.out
+					.println("Output folder already exists in the base input directory!");
+			System.exit(0);
 		} else {
 			result = directory.mkdirs();
 		}
