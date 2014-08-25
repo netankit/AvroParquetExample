@@ -95,8 +95,8 @@ public class GenericParquetMerge {
 			if (fileEntry.isDirectory()) {
 				continue;
 			} else {
-				if (fileEntry.toString().endsWith(".parquet")
-						|| fileEntry.toString().endsWith(".PARQUET")) {
+				if (fileEntry.toString().toUpperCase().toLowerCase()
+						.endsWith(".parquet")) {
 					// System.out.println("Current File: " + fileEntry);
 					Path parquet_file_path = new Path(fileEntry.getPath());
 					ParquetReader<GenericRecord> reader = new AvroParquetReader<GenericRecord>(
