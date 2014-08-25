@@ -77,17 +77,21 @@ public class GenericParquetMerge {
 			if (fileEntry.isDirectory()) {
 				continue;
 			} else {
-				// System.out.println("Current File: " + fileEntry);
-				Path parquet_file_path = new Path(fileEntry.getPath());
-				ParquetReader<GenericRecord> reader = new AvroParquetReader<GenericRecord>(
-						parquet_file_path);
-				GenericRecord tmp;
-				while ((tmp = reader.read()) != null) {
-					// System.out.println(tmp.toString());
-					writer.write(tmp);
+				if (fileEntry.toString().endsWith(".parquet")
+						|| fileEntry.toString().endsWith(".PARQUET")) {
+					// System.out.println("Current File: " + fileEntry);
+					Path parquet_file_path = new Path(fileEntry.getPath());
+					ParquetReader<GenericRecord> reader = new AvroParquetReader<GenericRecord>(
+							parquet_file_path);
+					GenericRecord tmp;
+					while ((tmp = reader.read()) != null) {
+						// System.out.println(tmp.toString());
+						writer.write(tmp);
+					}
+					reader.close();
+				} else {
+					continue;
 				}
-				reader.close();
-
 			}
 		}
 		writer.close();
