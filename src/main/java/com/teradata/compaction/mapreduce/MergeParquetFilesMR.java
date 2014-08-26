@@ -8,10 +8,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapreduce.Job;
-
-import parquet.Log;
 
 /**
  * This script can be used to merge all Parquet files present in a given
@@ -22,7 +19,7 @@ import parquet.Log;
  */
 public class MergeParquetFilesMR {
 
-	private static final Log LOG = Log.getLog(MergeParquetFilesMR.class);
+	// private static final Log LOG = Log.getLog(MergeParquetFilesMR.class);
 
 	final Path inputDirectoryPath = new Path(
 			"/home/ankit/workspace/AvroExample/inputforhadoop");
@@ -36,8 +33,7 @@ public class MergeParquetFilesMR {
 			InterruptedException {
 		mergeconf = new JobConf(MergeParquetFilesMR.class);
 		FileInputFormat.setInputPaths(mergeconf, inputDirectoryPath);
-		mergeconf
-				.setMapperClass((Class<? extends Mapper>) MergeParquetFilesMapper.class);
+		mergeconf.setMapperClass(MergeParquetFilesMapper.class);
 		// mergeJob = new Job(mergeconf);
 		// mergeJob.setNumReduceTasks(0);
 		// mergeJob.submit();
@@ -49,11 +45,11 @@ public class MergeParquetFilesMR {
 
 	private void waitForJob(Job job) throws InterruptedException, IOException {
 		while (!job.isComplete()) {
-			LOG.debug("waiting for job " + job.getJobName());
+			// LOG.debug("waiting for job " + job.getJobName());
 			sleep(100);
 		}
-		LOG.info("status for job " + job.getJobName() + ": "
-				+ (job.isSuccessful() ? "SUCCESS" : "FAILURE"));
+		// LOG.info("status for job " + job.getJobName() + ": "
+		// + (job.isSuccessful() ? "SUCCESS" : "FAILURE"));
 		if (!job.isSuccessful()) {
 			throw new RuntimeException("job failed " + job.getJobName());
 		}

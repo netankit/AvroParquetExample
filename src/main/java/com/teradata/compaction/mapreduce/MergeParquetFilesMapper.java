@@ -24,7 +24,7 @@ public class MergeParquetFilesMapper extends MapReduceBase implements
 	public void map(String directorypath, NullWritable arg1,
 			OutputCollector<NullWritable, NullWritable> arg2, Reporter arg3)
 			throws IOException {
-		ParquetMergeSingle pms = new ParquetMergeSingle();
-		pms.runmergejob(directorypath);
+
+		ParquetMergeSingle.runmergejob(directorypath);
 	}
 }
