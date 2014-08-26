@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.FileInputFormat;
+import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapreduce.Job;
@@ -37,10 +38,12 @@ public class MergeParquetFilesMR {
 		FileInputFormat.setInputPaths(mergeconf, inputDirectoryPath);
 		mergeconf
 				.setMapperClass((Class<? extends Mapper>) MergeParquetFilesMapper.class);
-		mergeJob = new Job(mergeconf);
-		mergeJob.setNumReduceTasks(0);
-		mergeJob.submit();
-		waitForJob(mergeJob);
+		// mergeJob = new Job(mergeconf);
+		// mergeJob.setNumReduceTasks(0);
+		// mergeJob.submit();
+		// waitForJob(mergeJob);
+		mergeconf.setNumReduceTasks(0);
+		JobClient.runJob(mergeconf);
 
 	}
 
