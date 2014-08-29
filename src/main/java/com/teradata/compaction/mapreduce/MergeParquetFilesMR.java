@@ -4,20 +4,17 @@ import java.io.IOException;
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.mapreduce.AvroJob;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import parquet.avro.AvroParquetOutputFormat;
 import parquet.avro.AvroParquetReader;
@@ -34,9 +31,10 @@ public class MergeParquetFilesMR {
 	private static Schema fileSchema;
 
 	public static class SampleParquetMapper extends
-			Mapper<LongWritable, LongWritable, LongWritable, Text> {
+			Mapper<LongWritable, Text, LongWritable, Text> {
 
-		public void map(NullWritable key, IndexedRecord values, Context context)
+		@Override
+		public void map(LongWritable key, Text values, Context context)
 				throws IOException, InterruptedException {
 
 		}
@@ -45,8 +43,8 @@ public class MergeParquetFilesMR {
 	public static class SampleParquetReducer extends
 			Reducer<LongWritable, Text, LongWritable, Text> {
 
-		public void reduce(NullWritable key, IndexedRecord values,
-				Context context) throws IOException, InterruptedException {
+		public void reduce(LongWritable key, Text values, Context context)
+				throws IOException, InterruptedException {
 
 		}
 	}
@@ -57,16 +55,16 @@ public class MergeParquetFilesMR {
 		Job job = new Job(conf, "MergeParquet");
 
 		final Path inputPath = new Path(
-				"/home/ankit/workspace/AvroExample/userprofiles/");
-
+				"/home/ankit/workspace/AvroExample/newtest/");
+		final Path out = new Path("output_newtest");
 		Schema schemaParquetFile = getBaseSchema(inputPath, conf);
 		job.setJarByClass(MergeParquetFilesMR.class);
 
 		job.setMapperClass(SampleParquetMapper.class);
 		job.setReducerClass(SampleParquetReducer.class);
-		job.setOutputKeyClass(NullWritable.class);
-		job.setOutputValueClass(IndexedRecord.class);
-
+		// job.setOutputKeyClass(NullWritable.class);
+		// job.setOutputValueClass(IndexedRecord.class);
+		job.setOutputFormatClass(AvroParquetOutputFormat.class);
 		// Set Schema for various phases
 		// AvroJob.setInputValueSchema(job, schemaParquetFile);
 		// AvroJob.setInputKeySchema(job, null);
@@ -75,10 +73,11 @@ public class MergeParquetFilesMR {
 		// AvroJob.setOutputKeySchema(job, null);
 		// AvroJob.setOutputValueSchema(job, schemaParquetFile);
 		AvroParquetOutputFormat.setSchema(job, schemaParquetFile);
-		job.setNumReduceTasks(1);
 
 		FileInputFormat.addInputPath(job, inputPath);
-		FileOutputFormat.setOutputPath(job, new Path("output_userprofiles"));
+		AvroParquetOutputFormat.setOutputPath(job, out);
+		job.setNumReduceTasks(1);
+
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 
