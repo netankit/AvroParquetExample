@@ -96,6 +96,7 @@ public class ParquetMergeSingle {
 					ParquetReader<GenericRecord> reader = new AvroParquetReader<GenericRecord>(
 							parquet_file_path);
 					GenericRecord tmp;
+
 					while ((tmp = reader.read()) != null) {
 						// System.out.println(tmp.toString());
 						writer.write(tmp);
