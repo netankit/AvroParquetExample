@@ -19,6 +19,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import parquet.avro.AvroParquetOutputFormat;
 import parquet.avro.AvroParquetReader;
 import parquet.hadoop.ParquetReader;
 
@@ -30,6 +31,8 @@ import parquet.hadoop.ParquetReader;
  *
  */
 public class MergeParquetFilesMR {
+	private static Schema fileSchema;
+
 	public static class SampleParquetMapper extends
 			Mapper<LongWritable, LongWritable, LongWritable, Text> {
 
@@ -65,12 +68,13 @@ public class MergeParquetFilesMR {
 		job.setOutputValueClass(IndexedRecord.class);
 
 		// Set Schema for various phases
-		AvroJob.setInputValueSchema(job, schemaParquetFile);
-		AvroJob.setInputKeySchema(job, null);
-		AvroJob.setMapOutputKeySchema(job, null);
+		// AvroJob.setInputValueSchema(job, schemaParquetFile);
+		// AvroJob.setInputKeySchema(job, null);
+		// AvroJob.setMapOutputKeySchema(job, null);
 		AvroJob.setMapOutputValueSchema(job, schemaParquetFile);
-		AvroJob.setOutputKeySchema(job, null);
-		AvroJob.setOutputValueSchema(job, schemaParquetFile);
+		// AvroJob.setOutputKeySchema(job, null);
+		// AvroJob.setOutputValueSchema(job, schemaParquetFile);
+		AvroParquetOutputFormat.setSchema(job, schemaParquetFile);
 		job.setNumReduceTasks(1);
 
 		FileInputFormat.addInputPath(job, inputPath);
@@ -80,15 +84,26 @@ public class MergeParquetFilesMR {
 
 	private static Schema getBaseSchema(final Path pathToParqetFiles,
 			Configuration conf) throws IOException {
-		Schema fileSchema = null;
-		FileSystem fsys = pathToParqetFiles.getFileSystem(conf);
-		FileStatus[] fst = fsys.listStatus(pathToParqetFiles);
+		fileSchema = null;
+		FileSystem fsystem = pathToParqetFiles.getFileSystem(conf);
+		FileStatus fstatus = fsystem.getFileStatus(pathToParqetFiles);
 
-		ParquetReader<GenericRecord> reader_schema = new AvroParquetReader<GenericRecord>(
-				fst[3].getPath());
-		GenericRecord tmp_schema = reader_schema.read();
-		fileSchema = tmp_schema.getSchema();
-		reader_schema.close();
+		if (fstatus.isDir()) {
+			FileStatus[] files = fsystem.listStatus(fstatus.getPath());
+			for (FileStatus file : files) {
+				if (file.isDir()) {
+					continue;
+				} else {
+					ParquetReader<GenericRecord> reader_schema = new AvroParquetReader<GenericRecord>(
+							file.getPath());
+					GenericRecord tmp_schema = reader_schema.read();
+					fileSchema = tmp_schema.getSchema();
+					reader_schema.close();
+					break;
+				}
+			}
+		}
+		System.out.println(fileSchema.toString());
 		return fileSchema;
 	}
 }
