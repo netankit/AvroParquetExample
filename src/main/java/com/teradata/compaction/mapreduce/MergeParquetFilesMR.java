@@ -62,9 +62,16 @@ public class MergeParquetFilesMR {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		Job job = new Job(conf, "MergeParquet");
-		final Path inputPath = new Path(
-				"/home/ankit/workspace/AvroExample/newtest1/");
-		final Path out = new Path("output_newtest");
+
+		if (args.length != 2) {
+			System.err
+					.println("Usage: java -jar MergeParquetFilesMR path_to_input_folder path_to_output_folder ");
+			System.exit(0);
+		}
+
+		final Path inputPath = new Path(args[0]);
+		final Path out = new Path(args[1]);
+
 		Schema schemaParquetFile = getBaseSchema(inputPath, conf);
 		job.setJarByClass(MergeParquetFilesMR.class);
 		job.setMapperClass(SampleParquetMapper.class);
@@ -103,7 +110,9 @@ public class MergeParquetFilesMR {
 				}
 			}
 		}
-		System.out.println(fileSchema.toString());
+		// Print the Schema of one of the parquet files, which will be used as
+		// schema for the final file!
+		// System.out.println(fileSchema.toString());
 		return fileSchema;
 	}
 }

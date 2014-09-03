@@ -2,7 +2,7 @@ package com.teradata.avro;
 
 import java.util.Random;
 
-public class sample {
+public class GetRandomNum {
 
 	public static void main(String args[]) {
 		System.out.println(getRandomNumber());
