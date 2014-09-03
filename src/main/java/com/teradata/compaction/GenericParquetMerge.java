@@ -41,7 +41,7 @@ import parquet.hadoop.metadata.CompressionCodecName;
  * compiled Avro object.
  * 
  * Usage: javac GenericParquetMerge directory_path_of_bulk_input_files
- * Usage(JAR): java -jar pmerge directory_path_of_bulk_input_files
+ * Usage(JAR): java -jar GenericParquetMerge directory_path_of_bulk_input_files
  * 
  * Working: The script creates a new folder "output_000". And within it creates
  * a final_0000.parquet.

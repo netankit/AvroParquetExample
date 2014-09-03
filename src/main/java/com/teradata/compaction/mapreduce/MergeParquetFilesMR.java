@@ -1,3 +1,23 @@
+/* 
+ * @Copyright 2014 Teradata, GMBH.
+ * 
+ *  LICENCE INFORMATION
+ * --------------------- 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ *  * */
+
 package com.teradata.compaction.mapreduce;
 
 import java.io.IOException;
@@ -24,9 +44,25 @@ import parquet.hadoop.ParquetReader;
 
 /**
  * This script can be used to merge all Parquet files present in a given
- * directory, corresponding to a given schema, using map-reduce.
+ * directory, with the same given schema, using map-reduce. This script differs
+ * from SimpleMergeParquetFiles as it doesn't require an already compiled Avro
+ * object and from 'GenericParquetMerge' as it utilizes the Hadoop Framework.
  * 
- * @author ankit
+ * Usage: javac MergeParquetFilesMR directory_path_of_bulk_input_files
+ * directory_path_output
+ * 
+ * Usage(JAR): java -jar MergeParquetFilesMR directory_path_of_bulk_input_files
+ * directory_path_output
+ * 
+ * Working: The script creates a parquet file "part-r-00000.parquet", in the
+ * output folder specified by user. And within it creates a final_0000.parquet.
+ * 
+ * WARNING: If the directory_path_of_bulk_input_files already contains a folder
+ * named "output_000", the script exits!
+ * 
+ * @author Ankit Bahuguna <ankit.bahuguna@cs.tum.edu>
+ * @version 1.0
+ * @date 3 September, 2014
  *
  */
 public class MergeParquetFilesMR {

@@ -58,6 +58,14 @@ import parquet.hadoop.metadata.CompressionCodecName;
 public class ParquetMergeSingle {
 
 	public static void main(String[] args) throws IOException {
+
+		if (args.length != 1) {
+			System.err
+					.println("Usage (After Compiling Java Class): javac GenericParquetMerge directory_path_of_bulk_input_files");
+			System.err
+					.println("Usage (Pre-Compiled JAR): java -jar pmerge directory_path_of_bulk_input_files");
+			System.exit(0);
+		}
 		String fileInputPath = args[0];
 		runmergejob(fileInputPath);
 	}
