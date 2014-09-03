@@ -76,12 +76,11 @@ public class MergeParquetFilesMR {
 		job.setJarByClass(MergeParquetFilesMR.class);
 		job.setMapperClass(SampleParquetMapper.class);
 		job.setReducerClass(SampleParquetReducer.class);
-
 		job.setInputFormatClass(AvroParquetInputFormat.class);
 		job.setOutputFormatClass(AvroParquetOutputFormat.class);
 		job.setMapOutputKeyClass(NullWritable.class);
-		AvroJob.setMapOutputValueSchema(job, schemaParquetFile);
 
+		AvroJob.setMapOutputValueSchema(job, schemaParquetFile);
 		AvroParquetOutputFormat.setSchema(job, schemaParquetFile);
 		FileInputFormat.addInputPath(job, inputPath);
 		AvroParquetOutputFormat.setOutputPath(job, out);
