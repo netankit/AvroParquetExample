@@ -122,15 +122,20 @@ public class GenericParquetMerge {
 			if (fileEntry.isDirectory()) {
 				continue;
 			} else {
-				Path parquet_file_path = new Path(fileEntry.getPath());
+				if (fileEntry.toString().toUpperCase().toLowerCase()
+						.endsWith(".parquet")) {
+					Path parquet_file_path = new Path(fileEntry.getPath());
 
-				ParquetReader<GenericRecord> reader_schema = new AvroParquetReader<GenericRecord>(
-						parquet_file_path);
+					ParquetReader<GenericRecord> reader_schema = new AvroParquetReader<GenericRecord>(
+							parquet_file_path);
 
-				GenericRecord tmp_schema = reader_schema.read();
-				fileSchema = tmp_schema.getSchema();
-				reader_schema.close();
-				break;
+					GenericRecord tmp_schema = reader_schema.read();
+					fileSchema = tmp_schema.getSchema();
+					reader_schema.close();
+					break;
+				} else {
+					continue;
+				}
 
 			}
 		}

@@ -100,12 +100,17 @@ public class MergeParquetFilesMR {
 				if (file.isDir()) {
 					continue;
 				} else {
-					ParquetReader<GenericRecord> reader_schema = new AvroParquetReader<GenericRecord>(
-							file.getPath());
-					GenericRecord tmp_schema = reader_schema.read();
-					fileSchema = tmp_schema.getSchema();
-					reader_schema.close();
-					break;
+					if (file.getPath().toString().toUpperCase().toLowerCase()
+							.endsWith(".parquet")) {
+						ParquetReader<GenericRecord> reader_schema = new AvroParquetReader<GenericRecord>(
+								file.getPath());
+						GenericRecord tmp_schema = reader_schema.read();
+						fileSchema = tmp_schema.getSchema();
+						reader_schema.close();
+						break;
+					} else {
+						continue;
+					}
 				}
 			}
 		}
