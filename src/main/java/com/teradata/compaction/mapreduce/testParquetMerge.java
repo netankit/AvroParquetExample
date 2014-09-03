@@ -30,11 +30,11 @@ import parquet.hadoop.ParquetReader;
 
 /**
  * This script can be used to test the ParquetFileMerge. It calculates the
- * number of records which are there in the input ParquetFiles in a
- * givendirectory, sums them up and then calculates the number of records in the
- * given output Parquet file generated after the merge operation. At the end, it
- * matches both counts and verifies whether or not all records are written to
- * the output parquet file.
+ * number of records which are there in the input parquet files present in a
+ * given directory, sums them up and then calculates the number of records in
+ * the given output parquet file generated after the merge operation. At the
+ * end, it matches both counts and verifies whether or not all records are
+ * written to the output parquet file.
  * 
  * Usage: java -jar testParquetMerge path_to_input_folder path_to_output_file
  * 
