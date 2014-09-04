@@ -92,11 +92,8 @@ public class GenericParquetMerge {
 				DEFAULT_PAGE_SIZE, false);
 
 		for (File fileEntry : folder.listFiles()) {
-			if (fileEntry.isDirectory()) {
-				continue;
-			} else {
-				if (fileEntry.toString().toUpperCase().toLowerCase()
-						.endsWith(".parquet")) {
+			if (!fileEntry.isDirectory()) {
+				if (fileEntry.toString().toLowerCase().endsWith(".parquet")) {
 					// System.out.println("Current File: " + fileEntry);
 					Path parquet_file_path = new Path(fileEntry.getPath());
 					ParquetReader<GenericRecord> reader = new AvroParquetReader<GenericRecord>(
@@ -107,8 +104,6 @@ public class GenericParquetMerge {
 						writer.write(tmp);
 					}
 					reader.close();
-				} else {
-					continue;
 				}
 			}
 		}
@@ -119,11 +114,8 @@ public class GenericParquetMerge {
 	private static Schema getBaseSchema(final File folder, Schema fileSchema)
 			throws IOException {
 		for (final File fileEntry : folder.listFiles()) {
-			if (fileEntry.isDirectory()) {
-				continue;
-			} else {
-				if (fileEntry.toString().toUpperCase().toLowerCase()
-						.endsWith(".parquet")) {
+			if (!fileEntry.isDirectory()) {
+				if (fileEntry.toString().toLowerCase().endsWith(".parquet")) {
 					Path parquet_file_path = new Path(fileEntry.getPath());
 
 					ParquetReader<GenericRecord> reader_schema = new AvroParquetReader<GenericRecord>(
@@ -133,8 +125,6 @@ public class GenericParquetMerge {
 					fileSchema = tmp_schema.getSchema();
 					reader_schema.close();
 					break;
-				} else {
-					continue;
 				}
 
 			}
