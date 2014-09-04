@@ -55,10 +55,10 @@ import parquet.hadoop.ParquetReader;
  * directory_path_output
  * 
  * Working: The script creates a parquet file "part-r-00000.parquet", in the
- * output folder specified by user. And within it creates a final_0000.parquet.
+ * output folder specified by user.
  * 
  * WARNING: If the directory_path_of_bulk_input_files already contains a folder
- * named "output_000", the script exits!
+ * named "directory_path_output", the script exits!
  * 
  * @author Ankit Bahuguna <ankit.bahuguna@cs.tum.edu>
  * @version 1.0
