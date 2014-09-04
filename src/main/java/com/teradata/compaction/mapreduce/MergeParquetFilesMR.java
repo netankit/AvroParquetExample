@@ -133,10 +133,8 @@ public class MergeParquetFilesMR {
 		if (fstatus.isDir()) {
 			FileStatus[] files = fsystem.listStatus(fstatus.getPath());
 			for (FileStatus file : files) {
-				if (file.isDir()) {
-					continue;
-				} else {
-					if (file.getPath().toString().toUpperCase().toLowerCase()
+				if (!file.isDir()) {
+					if (file.getPath().toString().toLowerCase()
 							.endsWith(".parquet")) {
 						ParquetReader<GenericRecord> reader_schema = new AvroParquetReader<GenericRecord>(
 								file.getPath());
@@ -144,8 +142,6 @@ public class MergeParquetFilesMR {
 						fileSchema = tmp_schema.getSchema();
 						reader_schema.close();
 						break;
-					} else {
-						continue;
 					}
 				}
 			}
