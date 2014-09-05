@@ -45,8 +45,8 @@ import parquet.hadoop.ParquetReader;
 /**
  * This script can be used to merge all Parquet files present in a given
  * directory, with the same given schema, using map-reduce. This script differs
- * from SimpleMergeParquetFiles as it doesn't require an already compiled Avro
- * object and from 'GenericParquetMerge' as it utilizes the Hadoop Framework.
+ * from SimpleMergeParquetFiles as it doesn't require a pre-compiled Avro object
+ * and from 'GenericParquetMerge' as it utilizes the Hadoop Framework.
  * 
  * Usage: javac MergeParquetFilesMR directory_path_of_bulk_input_files
  * directory_path_output
