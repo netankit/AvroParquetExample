@@ -1,7 +1,8 @@
-AvroExample
-===========
+AvroParquetExample
+==================
 
 @Author: Ankit Bahuguna
+
 @Date: September 5, 2014
 
 
@@ -21,6 +22,7 @@ Avro provides:
 * Simple integration with dynamic languages. 
 * Code generation is not required to read or write data files nor to use or implement RPC protocols. 
 * Code generation as an optional optimization, only worth implementing for statically typed languages. 
+
 Link: http://avro.apache.org/
 
 Parquet
